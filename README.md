@@ -12,6 +12,13 @@ Uses rosserial-arduino to bridge onto an arduino and control it through ros. Rea
 6. Either use roscore and rosserial-python to connect to the arduino node.
 7. Or use a launch file like this [example](launch/single_linact.launch)
 
+### Dependencies
+
+```bash
+sudo apt install ros-noetic-rosserial
+sudo apt install ros-noetic-rosserial-arduino
+```
+
 ### Rosserial Tutorial
 
 Generally good [reference tutorial](http://wiki.ros.org/rosserial_arduino/Tutorials/CMake).
