@@ -122,10 +122,14 @@ rosserial_configure_client(
 )
 
 rosserial_add_client_target(firmware chatter chatter.cpp)
-rosserial_add_client_target(firmware single_motor single_motor.cpp)
-
 rosserial_add_client_target(firmware chatter-upload)
+
+rosserial_add_client_target(firmware single_motor single_motor.cpp)
 rosserial_add_client_target(firmware single_motor-upload)
+
+rosserial_add_client_target(firmware multi_motor multi_motor.cpp)
+rosserial_add_client_target(firmware multi_motor-upload)
+
 ###########
 ## Build ##
 ###########

@@ -19,3 +19,9 @@ generate_arduino_firmware(single_motor
   BOARD mega2560
   PORT /dev/ttyACM0
 )
+
+generate_arduino_firmware(multiple_motors
+  SRCS multi_lin_act.cpp ${ROS_LIB_DIR}/time.cpp
+  BOARD mega2560
+  PORT /dev/ttyACM0
+)
