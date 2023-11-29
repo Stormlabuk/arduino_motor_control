@@ -10,6 +10,7 @@ project(ring_ctrl)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  ros_coils
   rosserial_arduino
   rosserial_client
   std_msgs
@@ -184,6 +185,11 @@ include_directories(
 #   scripts/my_python_script
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
+
+catkin_install_python(PROGRAMS
+  scripts/sampling_func.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
