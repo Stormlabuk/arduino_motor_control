@@ -1,12 +1,13 @@
 import rospy
 from std_msgs.msg import UInt32
 from ros_coils.msg import magField
+from ros_coils.msg import magFieldArray
 
 class SamplingFunc:
 
 
     def __init__(self):
-        rospy.init_node('my_node', anonymous=True)
+        rospy.init_node('wave_sampling_node', anonymous=True)
 
         # Create publishers for the "servo" and "field" topics
         self.servo_pub = rospy.Publisher('servo', UInt32, queue_size=10)
@@ -19,7 +20,10 @@ class SamplingFunc:
         self.rate = rospy.Rate(10)  # 10 Hz
 
         # Create a rosparam for ts
-        self.ts = rospy.get_param('~ts', default=1)  # Default value is 1
+        self.ts = rospy.get_param('~ts', default=4)  # Default value is 4
+        if(self.ts < 3 or self.ts > 21):
+            if(self.ts % 2 == 0):
+                self.ts = self.ts - 1
 
     def input_motor_callback(self, msg):
         # Callback function for the "inputMotor" topic
@@ -42,7 +46,6 @@ class SamplingFunc:
             field_msg = magField()
             # Set the value of the message
             self.field_pub.publish(field_msg)
-
             self.rate.sleep()
 
 if __name__ == '__main__':
