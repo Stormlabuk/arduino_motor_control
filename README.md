@@ -12,10 +12,21 @@ The same repeats going towards Little Endian.
 
 ### Compiling
 
+Compiling is done in 2 stages, verify and upload:
+
+1. Verifying arduino-serial package **PACKAGE_NAME**
+
 ``` bash
-catkin build --no-deps  ring_ctrl --make-args ring_ctrl_firmware_single_motor-upload
+catkin build PACKAGE_NAME
 ```
 
+2. Uploading target **TARGET** in package **PACKAGE_NAME**
+
+``` bash
+catkin build --no-deps  PACKAGE_NAME --make-args PACKAGE_NAM_firmware_TARGET-upload
+```
+
+3. TARGET node is immediately uploaded and run. Node is spun when a rosserial node is used to connect the Arduino to remote master. See [single motor example](launch/single_linact.launch) for a reference.
 
 ## Dependencies
 
