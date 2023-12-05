@@ -10,6 +10,13 @@ Spins a node with single topic "servo". Message is UInt32.
 Big Endian pair is then passed to the proximal motor, with the 0x00-0xFF range mapping the interval 1000-2000 (none to max extension).
 The same repeats going towards Little Endian.
 
+### Compiling
+
+``` bash
+catkin build --no-deps  ring_ctrl --make-args ring_ctrl_firmware_single_motor-upload
+```
+
+
 ## Dependencies
 
 ```bash
