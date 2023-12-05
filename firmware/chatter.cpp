@@ -1,7 +1,6 @@
-#include <ros.h>
-#include <std_msgs/String.h>
-
 #include <Arduino.h>
+#include <Rosserial_Arduino_Library/src/ros.h>
+#include <Rosserial_Arduino_Library/src/std_msgs/String.h>
 
 ros::NodeHandle nh;
 
@@ -10,16 +9,14 @@ ros::Publisher chatter("chatter", &str_msg);
 
 char hello[13] = "hello world!";
 
-void setup()
-{
-  nh.initNode();
-  nh.advertise(chatter);
+void setup() {
+    nh.initNode();
+    nh.advertise(chatter);
 }
 
-void loop()
-{
-  str_msg.data = hello;
-  chatter.publish( &str_msg );
-  nh.spinOnce();
-  delay(1000);
+void loop() {
+    str_msg.data = hello;
+    chatter.publish(&str_msg);
+    nh.spinOnce();
+    delay(1000);
 }
