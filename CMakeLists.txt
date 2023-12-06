@@ -131,6 +131,9 @@ rosserial_add_client_target(firmware single_motor-upload)
 rosserial_add_client_target(firmware multi_motor multi_motor.cpp)
 rosserial_add_client_target(firmware multi_motor-upload)
 
+rosserial_add_client_target(firmware stepper stepper.cpp)
+rosserial_add_client_target(firmware stepper-upload)
+
 ###########
 ## Build ##
 ###########
