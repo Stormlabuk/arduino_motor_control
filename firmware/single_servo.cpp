@@ -4,6 +4,8 @@
 
 ros::NodeHandle nh;
 Servo servo;
+int servoPin = 9;
+char loginfo_buffer[100];
 
 void servo_cb(const std_msgs::UInt16 &cmd_msg) {
     servo.writeMicroseconds(cmd_msg.data);
@@ -15,7 +17,14 @@ void setup() {
     nh.initNode();
     nh.subscribe(sub);
 
-    servo.attach(9);
+    if (!nh.getParam("servoPin", &servoPin)) {
+        nh.loginfo("servoPin not set, using default");
+        servoPin = 10;
+    } else {
+        sprintf(loginfo_buffer, "servoPin: %d", servoPin);
+        nh.loginfo(loginfo_buffer);
+    };
+    servo.attach(servoPin);
 }
 
 void loop() {

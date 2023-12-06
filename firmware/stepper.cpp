@@ -13,6 +13,7 @@
 #define dirA 12
 #define dirB 13
 
+
 // Define number of steps per revolution:
 const int stepsPerRevolution = 200;
 char loginfo_buffer[100];
@@ -20,6 +21,7 @@ ros::NodeHandle nh;
 int MOTOR_SPEED;  // Motor speed in mm/s
 int rotor_d;      // Rotor diameter in mm
 int MOTOR_RPM;    // Motor speed in RPM
+float StepsPerMM; // Steps per mm
 // Give the motor control pins names:
 
 // Initialize the stepper library on the motor shield:
@@ -27,6 +29,7 @@ Stepper myStepper = Stepper(stepsPerRevolution, dirA, dirB);
 
 void stepper_cb(const std_msgs::Int32 &cmd_msg) {
     int data = cmd_msg.data;
+    data = data * StepsPerMM;
     myStepper.step(data);
 }
 
@@ -53,7 +56,7 @@ void setup() {
         nh.loginfo(loginfo_buffer);
     }
     MOTOR_RPM = MOTOR_SPEED * 60 / (PI * rotor_d);
-
+    StepsPerMM = stepsPerRevolution / (PI * rotor_d);
     // Set the PWM and brake pins so that the direction pins can be used to
     // control the motor:
     pinMode(pwmA, OUTPUT);

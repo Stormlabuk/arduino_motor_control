@@ -4,11 +4,29 @@ Uses rosserial-arduino to bridge onto an arduino and control it through ros. Rea
 
 ## Usage
 
+### [Chatter](firmware/chatter.cpp)
+
+Simple hello world program.
+
+### [Single Servo](firmware/single_servo.cpp)
+
+Subscribes on topic "servo", taking in an UInt16 and applying it to the servo using "servo.writeMicroseconds()".
+
+[Launch file](launch/single_linact.launch).
+
+### [Stepper motor](firmware/stepper.cpp)
+
+Subscribes on topic "stepper", message type Int32, the motor will move that many mms (works positive and negative). The pins are setup for an Arduino Uno with Motor Shield V3. The motor speed can be set using rosParam ("MOTOR_SPEED"), as well as the rotor Diameter ("ROTOR_D"), which are used together to calculate the RPM required.
+
+[Launch file](launch/stepper.launch)
+
 ### [Multi-Motor](firmware/multi_lin_act.cpp)
 
 Spins a node with single topic "servo". Message is UInt32.
 Big Endian pair is then passed to the proximal motor, with the 0x00-0xFF range mapping the interval 1000-2000 (none to max extension).
 The same repeats going towards Little Endian.
+
+[Launch file](launch/multi_linact.launch)
 
 ### Compiling
 
