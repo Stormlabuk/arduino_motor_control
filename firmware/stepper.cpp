@@ -34,20 +34,6 @@ void stepper_cb(const std_msgs::Int32 &cmd_msg) {
 }
 
 
-float calculateRequiredSteps(int desiredDistance, int diameter, int stepsPerRevolution) {
-    // Calculate the circumference of the rotor
-    float circumference = M_PI * diameter;
-
-    // Calculate the distance traveled per step (mm per step)
-    float stepToMMConversionFactor = circumference / stepsPerRevolution;
-
-    // Calculate the number of steps required to travel the desired distance
-    float requiredSteps = desiredDistance / stepToMMConversionFactor;
-
-    return requiredSteps;
-}
-
-
 ros::Subscriber<std_msgs::Int32> sub("stepper", &stepper_cb);
 
 void setup() {
