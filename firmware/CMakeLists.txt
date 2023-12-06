@@ -27,7 +27,7 @@ generate_arduino_firmware(multiple_motors
 )
 
 generate_arduino_firmware(stepper
-  SRCS stepper.cpp ${ROS_LIB_DIR}/time.
+  SRCS stepper.cpp ${ROS_LIB_DIR}/time.cpp
   BOARD uno
   PORT /dev/ttyACM0
 )
