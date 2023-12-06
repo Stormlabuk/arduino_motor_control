@@ -30,13 +30,29 @@ catkin build --no-deps  PACKAGE_NAME --make-args PACKAGE_NAM_firmware_TARGET-upl
 
 3. TARGET node is immediately uploaded and run. Node is spun when a rosserial node is used to connect the Arduino to remote master. See [single motor example](launch/single_linact.launch) for a reference.
 
-### Dependencies
+## Examples
+
+### [Chatter](firmware/chatter.cpp)
+
+Simple hello world program.
+
+### [Single Servo](firmware/single_servo.cpp)
+
+Subscribes on topic "servo", taking in an UInt16 and applying it to the servo using "servo.writeMicroseconds()". Might be worth coming back to this and applying rosParam to the "servo.attach()" call at some point.
+
+[Launch file](launch/single_linact.launch).
+
+### [Stepper motor](firmware/stepper.cpp)
+
+Subscribes on topic "stepper", message type Int32, the motor will move that many mms (works positive and negative). The pins are setup for an Arduino Uno with Motor Shield V3. The motor speed can be set using rosParam ("MOTOR_SPEED"), as well as the rotor Diameter ("ROTOR_D"), which are used together to calculate the RPM required.
+
+## Dependencies
 
 ```bash
 sudo apt install ros-noetic-rosserial
 sudo apt install ros-noetic-rosserial-arduino
 ```
 
-### Rosserial Tutorial
+## Rosserial Tutorial
 
 Generally good [reference tutorial](http://wiki.ros.org/rosserial_arduino/Tutorials/CMake).
