@@ -33,6 +33,12 @@ void setup() {
     act1.attach(10);
     act2.attach(11);
     act3.attach(12);
+
+    // initialise positions
+    act0.writeMicroseconds(1100);
+    act1.writeMicroseconds(1100);
+    act2.writeMicroseconds(1100);
+    act3.writeMicroseconds(1100);
 }
 
 void loop() {
