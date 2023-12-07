@@ -12,16 +12,15 @@ class SamplingFunc:
 
         # Create publishers for the "servo" and "field" topics
         self.servo_pub = rospy.Publisher('servo', UInt32, queue_size=10)
-        self.field_pub = rospy.Publisher('field', magField, queue_size=10)
-
-
-        self.rate = rospy.Rate(1)  # 10 Hz
+        self.field_pub = rospy.Publisher('field', magField, queue_size=10)     
 
         # Create a rosparam for ts
         self.ts = rospy.get_param('~ts', default=4)  # Default value is 4
         if(self.ts < 3 or self.ts > 21):
             if(self.ts % 2 == 0):
                 self.ts = self.ts - 1
+        freq = self.ts / 3
+        self.rate = rospy.Rate(freq)  # 10 Hz
 
         self.field_min = rospy.get_param('/sampler/field_min', default=[0, 0, 0])  # Default value is [0, 0, 0]
         self.field_max = rospy.get_param('/sampler/field_max', default=[0, 0, 0])  # Default value is [0, 0, 0]
@@ -49,10 +48,10 @@ class SamplingFunc:
         return disc_interval
 
     def assembleServoInput(self, idx):
-        s0 = int( self.step_0[idx])
-        s1 = int( self.step_1[idx])
-        s2 = int( self.step_2[idx])
-        s3 = int( self.step_3[idx])
+        s0 = int( self.step_0[idx] * 255 / 100)
+        s1 = int( self.step_1[idx] * 255 / 100)
+        s2 = int( self.step_2[idx] * 255 / 100)
+        s3 = int( self.step_3[idx] * 255 / 100)
         uint32_value = (s0 << 24) | (s1 << 16) | (s2 << 8) | s3
         msg = UInt32()
         msg.data = uint32_value
@@ -65,9 +64,12 @@ class SamplingFunc:
             field_msg = magField()
 
             print("i: ", i)
-            print("field_to_pub: ", self.field_to_pub[:,i])
+            # print("field_to_pub: ", self.field_to_pub[:,i])
             servo_msg = self.assembleServoInput(i)
-            print("servo_msg: ", servo_msg)
+            # print("servo_msg: ", servo_msg)
+            field_msg.bx = self.field_to_pub[0,i]
+            field_msg.by = self.field_to_pub[1,i]
+            field_msg.bz = self.field_to_pub[2,i]
 
             # Publish to the "servo" topic
             self.servo_pub.publish(servo_msg)

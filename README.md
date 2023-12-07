@@ -28,6 +28,16 @@ The same repeats going towards Little Endian.
 
 [Launch file](launch/multi_linact.launch)
 
+### [Sampling Node](scripts/sampling_func.py)
+
+Node to discretise and publish Magnetic Field and Servo positions from a min-max input to N samples, following a sinusoidal pattern.
+
+Boundary values are defined in the [config](config/sampler.yaml) file. Field values are floats, while servo values are integers between 0 and 100, representing full retraction and full extension respectively.
+
+To ensure even point distribution, the "ts" rosparam is always rounded to the nearest odd number.
+
+[Launch File](launch/sampling_node.launch)
+
 ### Compiling
 
 Compiling is done in 2 stages, verify and upload:
