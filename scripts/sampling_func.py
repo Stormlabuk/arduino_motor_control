@@ -1,6 +1,7 @@
 import rospy
 import numpy as np
 from std_msgs.msg import UInt32
+from std_msgs.msg import Int32
 from ros_coils.msg import magField
 # from ros_coils.msg import magFieldArray
 
@@ -13,6 +14,7 @@ class SamplingFunc:
         # Create publishers for the "servo" and "field" topics
         self.servo_pub = rospy.Publisher('servo', UInt32, queue_size=10)
         self.field_pub = rospy.Publisher('field', magField, queue_size=10)     
+        self.stepper_pub = rospy.Publisher('stepper', Int32, queue_size=10)
 
         # Create a rosparam for ts
         self.ts = rospy.get_param('~ts', default=4)  # Default value is 4
@@ -40,8 +42,7 @@ class SamplingFunc:
         # print("field_to_pub: ", self.field_to_pub)
 
     def getInterval(self, ts, min, max):
-        # print arguments
-        
+        # print arguments        
         dividend = int( np.floor( (ts+1) / 2) ) # Number of intervals
         disc_interval = np.linspace(min, max, dividend) # discretised left hand of the curve
         disc_interval = np.concatenate((disc_interval, disc_interval[::-1][1:])) # append right hand
@@ -59,11 +60,23 @@ class SamplingFunc:
 
     def run(self):
         i = 0
+        stepperOut = True
         while not rospy.is_shutdown():
             servo_msg = UInt32()
             field_msg = magField()
 
-            print("i: ", i)
+            if(stepperOut and i == 0):
+                stepper_msg = Int32()
+                stepper_msg.data = 50
+                self.stepper_pub.publish(stepper_msg)
+                stepperOut = False
+            elif(not stepperOut and i == 0):
+                stepper_msg = Int32()
+                stepper_msg.data = -50
+                self.stepper_pub.publish(stepper_msg)
+                stepperOut = True
+
+            # print("i: ", i)
             # print("field_to_pub: ", self.field_to_pub[:,i])
             servo_msg = self.assembleServoInput(i)
             # print("servo_msg: ", servo_msg)
