@@ -1,0 +1,8 @@
+<launch>
+    <group ns="sampler">
+        <rosparam file="$(find ring_ctrl)/config/sampler.yaml" />
+    </group>
+    <node pkg="ring_ctrl" type="sampling_func.py" name="sampler" output="screen">
+        <!-- <param name="baud" value="57600" /> -->
+    </node>
+</launch>
