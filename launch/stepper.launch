@@ -1,5 +1,5 @@
 <launch>
-    <rosparam param="MOTOR_SPEED">16.667</rosparam>
+    <rosparam param="MOTOR_SPEED">15</rosparam>
     <rosparam param="ROTOR_D">5</rosparam>
     <node pkg="rosserial_python" type="serial_node.py" name="stepper" output="screen">
         <param name="port" value="/dev/ttyACM0" />
