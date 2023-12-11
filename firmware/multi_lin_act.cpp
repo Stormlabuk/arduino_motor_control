@@ -12,20 +12,22 @@ char loginfo_buffer[100];
 
 void act_cb(const std_msgs::UInt32 &cmd_msg) {
     uint32_t data = cmd_msg.data;
-    uint8_t act_cmds[4];
+    uint8_t extractedBytes[4];
+    float conv[4];
     int step_inputs[4];
     sprintf(loginfo_buffer, "data, var: %X", data);
     nh.loginfo(loginfo_buffer);
 
     for (int i = 0; i < 4; i++) {
-        act_cmds[i] = (data & 0xFF);  // Extract the rightmost byte
-        step_inputs[i] = (int) (act_cmds[i]) * 1000 / 255 +
-                      1000;
-        sprintf(loginfo_buffer, "shifted data: %02X at i %d", act_cmds[i], i);
+        extractedBytes[i] = data >> 8*(3-i) & 0xFF; 
+        conv[i] =  extractedBytes[i];
+        conv[i] = (float) conv[i] / 255;
+        conv[i] = conv[i] * 1000;
+        step_inputs[i] = conv[i] * 1000;
+        sprintf(loginfo_buffer, "extracted at i=%d: %02X", i, extractedBytes[i]);
         nh.loginfo(loginfo_buffer);
-        sprintf(loginfo_buffer, "calc data: %d at i %d", step_inputs[i], i);
+        sprintf(loginfo_buffer, "calc data at i=%d: %d",i, step_inputs[i]);
         nh.loginfo(loginfo_buffer);
-        data >>= 8;
     }
     
 
