@@ -1,0 +1,17 @@
+
+<launch>
+    <group ns="sampler">
+        <rosparam file="$(find ring_ctrl)/config/sampler.yaml" />
+    </group>
+    <node pkg="ring_ctrl" type="sampling_func.py" name="sampler" output="screen">
+        <!-- <param name="baud" value="57600" /> -->
+    </node>
+    <node pkg="rosserial_python" type="serial_node.py" name="rosserial" output="screen">
+        <param name="port" value="/dev/ttyACM0" />
+    </node>
+    <rosparam param="MOTOR_SPEED">15</rosparam>
+    <rosparam param="ROTOR_D">5</rosparam>
+    <node pkg="rosserial_python" type="serial_node.py" name="stepper" output="screen">
+        <param name="port" value="/dev/ttyACM1" />
+    </node>
+</launch>

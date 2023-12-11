@@ -75,24 +75,18 @@ class SamplingFunc:
 
     def run(self):
         i = 0
-        stepperOut = True
+        counter = 0
+        # stepperOut = True
         while not rospy.is_shutdown():
             servo_msg = UInt32()
             field_msg = magField()
+            stepper_msg = Int32()
+            # print("i: ", i, "counter: ", counter)
+            # if(counter == 0):
+            #     print("inserting")
 
-            if (stepperOut and i == 0):
-                stepper_msg = Int32()
-                stepper_msg.data = 50
-                self.stepper_pub.publish(stepper_msg)
-                stepperOut = False
-            elif (not stepperOut and i == 0):
-                stepper_msg = Int32()
-                stepper_msg.data = -50
-                self.stepper_pub.publish(stepper_msg)
-                stepperOut = True
+                # counter = counter + 1
 
-            # print("i: ", i)
-            # print("field_to_pub: ", self.field_to_pub[:,i])
             servo_msg = self.assembleServoInput(i)
             # print("servo_msg: ", servo_msg)
             field_msg.bx = self.field_to_pub[0, i]
@@ -105,8 +99,14 @@ class SamplingFunc:
             self.field_pub.publish(field_msg)
 
             i = i + 1
+ 
             if (i == self.ts):
                 i = 1
+                stepper_msg.data = 5
+                self.stepper_pub.publish(stepper_msg)
+                # counter = counter + 1
+                # if(counter == 10):
+                #     counter = 0
             self.rate.sleep()
 
 
