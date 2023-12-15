@@ -22,6 +22,7 @@ int MOTOR_SPEED;  // Motor speed in mm/s
 int rotor_d;      // Rotor diameter in mm
 int MOTOR_RPM;    // Motor speed in RPM
 float StepsPerMM; // Steps per mm
+int dir = 1;
 // Give the motor control pins names:
 
 // Initialize the stepper library on the motor shield:
@@ -29,15 +30,21 @@ Stepper myStepper = Stepper(stepsPerRevolution, dirA, dirB);
 
 void stepper_cb(const std_msgs::Int32 &cmd_msg) {
     int data = cmd_msg.data;
-    data = data * StepsPerMM;
+    data = data * StepsPerMM * dir;
     myStepper.step(data);
 }
 
+void dir_cb(const std_msgs::Int32 &cmd_msg) {
+    dir = cmd_msg.data;
+}
+
 ros::Subscriber<std_msgs::Int32> sub("stepper", &stepper_cb);
+ros::Subscriber<std_msgs::Int32> dir_sub("dir", &dir_cb);
 
 void setup() {
     nh.initNode();
     nh.subscribe(sub);
+    nh.subscribe(dir_sub);
     while (!nh.connected()) {
         nh.spinOnce();
     }
