@@ -21,7 +21,8 @@ class SamplingFunc:
         if (self.ts < 3 or self.ts > 21):
             if (self.ts % 2 == 0):
                 self.ts = self.ts - 1
-        freq = self.ts / 3
+        # freq = self.ts / 3
+        freq = 0.5
         self.rate = rospy.Rate(freq)  # 10 Hz
 
         self.field_min = rospy.get_param(
@@ -34,7 +35,10 @@ class SamplingFunc:
         # Default value is [0, 0, 0, 0]
         self.step_max = rospy.get_param(
             '/sampler/step_max', default=[0, 0, 0, 0])
-
+        self.initial_field_scale = rospy.get_param(
+            '/sampler/initial_field_scale', default=1
+        )
+        print(self.initial_field_scale)
         self.bxs = self.getInterval(
             self.ts, self.field_min[0], self.field_max[0])
         self.bys = self.getInterval(
@@ -76,8 +80,19 @@ class SamplingFunc:
     def run(self):
         i = 0
         counter = 0
-        # stepperOut = True
+        field_scale = self.initial_field_scale
+        # field_msg = magField()
+        # field_to_set = np.array([-10, 0, -4])
+        # field_msg.bx = field_to_set[0]
+        # field_msg.by = field_to_set[1]
+        # field_msg.bz = field_to_set[2]
+        # rospy.loginfo("setting initial values")
+        # self.field_pub.publish(field_msg)
+        # self.rate.sleep()
+
         while not rospy.is_shutdown():
+            if counter == 8:
+                field_scale = 1
             servo_msg = UInt32()
             field_msg = magField()
             stepper_msg = Int32()
@@ -89,9 +104,9 @@ class SamplingFunc:
 
             servo_msg = self.assembleServoInput(i)
             # print("servo_msg: ", servo_msg)
-            field_msg.bx = self.field_to_pub[0, i]
-            field_msg.by = self.field_to_pub[1, i]
-            field_msg.bz = self.field_to_pub[2, i]
+            field_msg.bx = self.field_to_pub[0, i] * field_scale
+            field_msg.by = self.field_to_pub[1, i] * field_scale
+            field_msg.bz = self.field_to_pub[2, i] * field_scale
 
             # Publish to the "servo" topic
             self.servo_pub.publish(servo_msg)
@@ -104,7 +119,7 @@ class SamplingFunc:
                 i = 1
                 stepper_msg.data = 5
                 self.stepper_pub.publish(stepper_msg)
-                # counter = counter + 1
+                counter = counter + 1
                 # if(counter == 10):
                 #     counter = 0
             self.rate.sleep()
