@@ -1,0 +1,6 @@
+<launch>
+<!-- X Supplies -->
+    <include file="$(find arduino_motor_control)/launch/stepper.launch"/>
+
+    <node name = "stepper_control" pkg="arduino_motor_control" type="control_stepper.py" output="screen"> </node>
+</launch>
