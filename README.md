@@ -30,7 +30,7 @@ catkin build --no-deps  PACKAGE_NAME --make-args PACKAGE_NAM_firmware_TARGET-upl
 
 3. TARGET node is immediately uploaded and run. Node is spun when a rosserial node is used to connect the Arduino to remote master. See [single motor example](launch/single_linact.launch) for a reference.
 
-## Examples
+## Examples Nodes
 
 ### [Chatter](firmware/chatter.cpp)
 
@@ -48,23 +48,40 @@ Subscribes on topic "stepper", message type Int32, the motor will move that many
 
 [Launch file](launch/stepper.launch)
 
+## Example Launch files
+
+After setting up the launch files with your desired parameters, you can launch them as follows:
+
+```bash
+roslaunch arduino_motor_control <LaunchFileName.launch>
+```
+
+### Stepper Launch file
+
+```bash
+roslaunch arduino_motor_control <stepper.launch>
+```
+
 ## Dependencies
 
-## Note for TEENSIES 3.5 Upwards:
-When running on a Teensy 3.5 or upwards, you need to edit the ArduinoHardware.h as shown in https://github.com/ros-drivers/rosserial/issues/259
-Line 44 of ArduinoHardware.h should read: 
-```
+## Note for TEENSIES 3.5 Upwards
+
+When running on a Teensy 3.5 or upwards, you need to edit the ArduinoHardware.h as shown in [link](https://github.com/ros-drivers/rosserial/issues/259)
+Line 44 of ArduinoHardware.h should read:
+
+```cpp
 #if defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__) || defined(__IMXRT1062__) || defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
 ```
 
-## Running rosserial 
-Follow the rosserial toturial on 
-http://wiki.ros.org/rosserial_arduino/Tutorials/Hello%20World
-```
+## Running rosserial
+
+Follow the rosserial toturial on [link](http://wiki.ros.org/rosserial_arduino/Tutorials/Hello%20World)
+
+```bash
 rosrun rosserial_arduino serial_node.py _port:=/dev/ttyUSB0
 ```
-This can be included in your launch file
 
+This can be included in your launch file
 
 ```bash
 sudo apt install ros-noetic-rosserial
