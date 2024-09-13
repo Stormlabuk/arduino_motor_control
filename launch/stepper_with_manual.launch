@@ -1,6 +1,13 @@
 <launch>
-<!-- X Supplies -->
-    <include file="$(find arduino_motor_control)/launch/stepper.launch"/>
+    <arg name="output" default="screen"/>
+    <arg name="write_bag" default="true"/>
+    <arg name="exp_name" default="ali_experiment"/>
+    <!-- <include file="$(find arduino_motor_control)/launch/stepper.launch"/> -->
+    <arg name="exclude_topics" default="/pylon_camera_node(.*)|/base_img|/inserter_img|/phantom_img|/tentacle_img|/image|/diagnostics|/tf"/>
+
+    <node name="bag_recorder" pkg="rosbag" type="record" args=" -o 
+    /home/stormlab/ros_ws/$(arg exp_name)
+    -a -x $(arg exclude_topics) " if="$(arg write_bag)"/>
 
     <node name = "stepper_control" pkg="arduino_motor_control" type="control_stepper.py" output="screen"> </node>
 </launch>
