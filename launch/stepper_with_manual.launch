@@ -9,5 +9,11 @@
     /home/stormlab/ros_ws/$(arg exp_name)
     -a -x $(arg exclude_topics) " if="$(arg write_bag)"/>
 
+    <rosparam param="MOTOR_SPEED">10</rosparam>
+    <rosparam param="ROTOR_D">5</rosparam>
+    <node pkg="rosserial_python" type="serial_node.py" name="stepper" output="screen">
+        <param name="port" value="/dev/ttyACM0" />
+    </node>
+
     <node name = "stepper_control" pkg="arduino_motor_control" type="control_stepper.py" output="screen"> </node>
 </launch>
